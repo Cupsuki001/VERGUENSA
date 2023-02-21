@@ -7,25 +7,26 @@ namespace WinFormsApp1
             InitializeComponent();
         }
 
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode.Text.Equals("Vehiculo"))
-            {
-                label5.Text = "Vehiculo ";
-            }
-            else if (treeView1.SelectedNode.Text.Equals("Vivienda"))
-            {
-                label5.Text = "Vivienda";
-            }
-           
+            TXBarbol.Enabled = false;
+            TXBtotal.Enabled = false;
         }
 
-        private void BTNlimpiar_Click(object sender, EventArgs e)
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            OPCplazo.Text = "";
-            OPCtiodebien.Text = "";
-            TXBcuota.Text = "";
-            MASKEDvalor.Text = "";
+            if(treeView1.SelectedNode.Text.Equals("INNS LABORAL")) 
+            {
+                label5.Text = "Inss laboral :";
+            }
+            else if(treeView1.SelectedNode.Text.Equals("INNS PATRONAL")) 
+            {
+                label5.Text = "Inss patronal :";
+            }
+            else if(treeView1.SelectedNode.Text.Equals("IR"))
+            {
+                label5.Text = "IR :";
+            }
         }
 
         private void BTNsalir_Click(object sender, EventArgs e)
@@ -35,64 +36,77 @@ namespace WinFormsApp1
 
         private void BTNcalcular_Click(object sender, EventArgs e)
         {
-            if(OPCplazo.Text == "" && OPCtiodebien.Text == "") 
-            {
-                MessageBox.Show("ERROR, Ingrese una opcion");
-            }
-            else if(TXBcuota.Text == "" && MASKEDvalor.Text == "") 
-            {
-                MessageBox.Show("Ingrese un valor para calcular");
-            }
-            else if(treeView1.SelectedNode.Text.Equals("Vehiculo")) 
-            {
-                double valor = Convert.ToDouble(MASKEDvalor.Text);
-                if (valor >= 5000 && valor <= 250000)
-                {
-                    if (OPCplazo.Text == "48 MESES" || OPCplazo.Text == "60 MESES" || OPCplazo.Text == "72 MESES") 
-                    {
-                        if (OPCtiodebien.Text == "Nuevo")
-                        {
+            double   ley, tot , por;
+           
 
-                        }
-                        else if (OPCtiodebien.Text == "Usado")
-                        {
-
-                        }
-                        else
-                        {
-                            MessageBox.Show("Ingrese el estado del bien");
-                            OPCtiodebien.Focus();
-                        }
-                    }
-                    else 
-                    {
-                        MessageBox.Show("LOS MESES NO PUEDEN PASAR DE LOS 72 *Vea la tabal de PLAZO MESES*");
-                        OPCplazo.Text = "";
-                        OPCplazo.Focus();
-                    }
-                    
-                    
-                }
-                else 
-                {
-                    MessageBox.Show("LOS VALORES TIENE QUE SER ENTRE 5000 o 250000");
-                    MASKEDvalor.Text = "";
-                    MASKEDvalor.Focus();
-                }
-            }
-            else if (treeView1.SelectedNode.Text.Equals("Vivienda")) 
+            if (MASKEDinssnumero.Text == "" && MASKEDingresomensual.Text == "") 
             {
-            
+                MessageBox.Show("Se necesita ingresar los datos necesario");
+                MASKEDinssnumero.Focus();
+            }
+            else if(MASKEDinssnumero.Text != "1234567") 
+            {
+                MessageBox.Show("EL NUMERO DEL INSS QUE INGRESO ES INCORRECTO");
+                MASKEDinssnumero.Text = "";
+                MASKEDinssnumero.Focus();
+                MASKEDingresomensual.Text = "";
+               
             }
             else 
             {
-                MessageBox.Show("INGRESE UN TIPO DE PRESTAMO PARA CONTINUAR");
+                double ing = Convert.ToDouble(MASKEDingresomensual.Text);
+
+                if (ing >= 6000 && ing <= 500000)
+                {
+
+                    if (treeView1.SelectedNode.Text.Equals("INNS LABORAL"))
+                    {
+                        ley = ing * 0.07;
+                        tot = ing - ley;
+
+                        TXBtotal.Text = tot.ToString();
+                        TXBarbol.Text = ley.ToString();
+                    }
+                    else if (treeView1.SelectedNode.Text.Equals("INNS PATRONAL"))
+                    {
+                        ley = ing * 0.22;
+                        tot = ing;
+
+                        TXBtotal.Text = tot.ToString();
+                        TXBarbol.Text = ley.ToString();
+                    }
+                    else if (treeView1.SelectedNode.Text.Equals("IR"))
+                    {
+                        ley = ing * 0.11;
+                        tot = ing - ley;
+
+                        TXBtotal.Text = tot.ToString();
+                        TXBarbol.Text = ley.ToString();
+                    }
+                    else 
+                    {
+                        MessageBox.Show("INGRESE UNA DEDUCCION PARA CALCULAR");
+                        MASKEDinssnumero.Focus();
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Los ingresos tiene que estar en 6,000 o 500,000");
+                    MASKEDingresomensual.Text = "";
+                    MASKEDingresomensual.Focus();
+                }
             }
+           
         }
 
-        private void OPCplazo_SelectedIndexChanged(object sender, EventArgs e)
+        private void BTNlimpiar_Click(object sender, EventArgs e)
         {
-            
+            MASKEDingresomensual.Text = "";
+            MASKEDinssnumero.Text = "";
+            TXBarbol.Text = "";
+            TXBtotal.Text = "";
+
         }
     }
 }
